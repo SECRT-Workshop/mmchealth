@@ -4,8 +4,6 @@ A small command line tool that reads the health and identity data from an eMMC c
 
 eMMC controllers report wear in a register called EXT_CSD, and the values in it look like `0x03` or `0x01`. That is fine for a datasheet, but not much help when you are standing at a bench looking at a tablet, a single board computer, or a thin client and wondering how much life the flash has left. mmchealth reads the register, translates the numbers, and shows them as percentages, sizes and names.
 
-Written by SECRT Workshop Tech, https://secrtworkshop.org
-
 ## What it shows
 
 - **Wear.** The two lifetime estimates from the controller, turned into a percentage range, a rough midpoint and a bar. The controller reports in steps of 10%, so `0x01` means somewhere between 0 and 10% used, `0x02` means 10 to 20%, and so on. `0x0B` means the chip has gone past its rated life.
@@ -17,16 +15,16 @@ Written by SECRT Workshop Tech, https://secrtworkshop.org
 
 ## Install
 
-Grab the release tarball, unpack it, and run the installer:
+Download the release tarball, extract using tar, then run the installation script:
 
 ```
 tar xzf mmchealth-1.0.0-x86_64.tar.gz
 ./install.sh
 ```
 
-The script asks for confirmation, then uses sudo to put the binary in `/usr/local/bin` with root ownership and mode 0755. If SELinux is in use it also fixes the label. To remove it later, run `./install.sh --uninstall`.
+The script asks for confirmation, then uses sudo to store the binary in `/usr/local/bin` with root ownership and mode 0755. If SELinux is in use, it also fixes the label. To remove it later, run `./install.sh --uninstall`.
 
-The binary is statically linked for x86_64, so it should run on most Linux systems without needing any libraries.
+The binary is statically linked for x86_64, you should be able to run this on most x64 based Linux systems without additional modification.
 
 ### Building from source
 
@@ -66,7 +64,7 @@ Check every eMMC device in the machine:
 sudo mmchealth
 ```
 
-Check one device and show the raw values too, which is handy when you are comparing against a datasheet or a bug report:
+Check one device and show the raw values too:
 
 ```
 sudo mmchealth -r /dev/mmcblk0
@@ -144,10 +142,10 @@ Run it with sudo. The register read goes through a block device ioctl, which is 
 The machine may not have eMMC, or the device may be an SD card, which is skipped on purpose. You can point it at a device by hand with `-d`. In a container or minimal VM, `/sys/block` may not expose the device at all.
 
 **Manufacturer shows as Unknown**
-The chip reports an ID that is not in the built-in table yet. The raw ID is still displayed. If you want it added, open an issue with the ID and the vendor name.
+The chip reports an ID that is not in the built-in table yet. The raw ID is still displayed. If you need to request to add a vendor, open an issue with the ID and the vendor name.
 
 **Everything says "not reported"**
-That controller does not implement the lifetime registers. Nothing the tool can do will change that.
+That controller does not implement the lifetime registers. Changes in mmchealth's source code will not change that.
 
 ## License
 
@@ -157,8 +155,4 @@ This program is free software; you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with this program; if not, see <https://www.gnu.org/licenses/>. The full text is in the `COPYING` file.
-
-## About
-
-SECRT Workshop Tech, https://secrtworkshop.org
+You should have received a copy of the GNU General Public License along with this program; if not, see <https://www.gnu.org/licenses/>. 
